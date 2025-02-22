@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Popup Login</title>
+    <style>
+        /* Modern Popup Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }.popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+    
+    .popup-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 350px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    .popup-content input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    
+    .popup-content button {
+        width: 100%;
+        padding: 10px;
+        background: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px 0;
+    }
+    
+    .popup-content button:hover {
+        background: #0056b3;
+    }
+    
+    .close {
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
+
+</head>
+<body>
+    <button onclick="openLoginPopup()">Login</button><div id="loginPopup" class="popup">
+    <div class="popup-content">
+        <span class="close" onclick="closeLoginPopup()">&times;</span>
+        <h2>Login / Sign Up</h2>
+        <input type="email" id="email" placeholder="Enter email">
+        <input type="password" id="password" placeholder="Enter password">
+        <button onclick="login()">Login</button>
+        <button onclick="signup()">Sign Up</button>
+        <p id="status"></p>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD9ByIFYJKfxc4Cmkfdc6t8yBWEO2NctL4",
+        authDomain: "vazeer-classes-e6ee0.firebaseapp.com",
+        projectId: "vazeer-classes-e6ee0",
+        storageBucket: "vazeer-classes-e6ee0.appspot.com",
+        messagingSenderId: "934910649671",
+        appId: "1:934910649671:web:af8ade4a28ccbfafaf5862",
+        measurementId: "G-PTXEY6P35S"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.openLoginPopup = function() {
+        document.getElementById('loginPopup').style.display = 'flex';
+    };
+
+    window.closeLoginPopup = function() {
+        document.getElementById('loginPopup').style.display = 'none';
+    };
+
+    window.login = function() {
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                document.getElementById('status').innerText = "Login Successful!";
+                setTimeout(closeLoginPopup, 1000);
+            })
+            .catch(error => {
+                document.getElementById('status').innerText = error.message;
+            });
+    };
+
+    window.signup = function() {
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                document.getElementById('status').innerText = "Account Created!";
+                setTimeout(closeLoginPopup, 1000);
+            })
+            .catch(error => {
+                document.getElementById('status').innerText = error.message;
+            });
+    };
+</script>
+
+</body>
+</html>
